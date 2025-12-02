@@ -7,8 +7,6 @@ A aplicação funciona via linha de comando (CLI) e também possui configuraçã
 
 ## 📦 Tecnologias utilizadas
 
-Para rodar esse projeto, você vai precisar adicionar as seguintes variáveis de ambiente no seu .env
-
 `Node.js (ESM)`
 
 `Axios`
