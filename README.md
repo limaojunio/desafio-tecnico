@@ -1,45 +1,39 @@
-📄 README — Desafio Técnico (Consulta de CNPJ com Node.js + MySQL + Docker)
+📄 README — Consulta de CNPJ (Node.js + MySQL + Docker)
 
-Este projeto foi desenvolvido para consultar informações de empresas a partir da API da Casa dos Dados, processar os resultados e salvar as informações em um banco MySQL.
-A aplicação funciona via linha de comando (CLI) e permite trabalhar tanto com um único CNPJ quanto com uma lista completa presente no arquivo cnpjs.txt.
+Este projeto realiza consultas de CNPJ utilizando a API da Casa dos Dados e salva as informações no banco MySQL.
+A aplicação funciona via linha de comando (CLI) e também possui configuração completa via Docker.
 
-Também preparei suporte completo a Docker, para subir o banco + aplicação com um único comando.
-
-🚀 Tecnologias usadas
+📦 Tecnologias utilizadas
 
 Node.js (ESM)
 
 Axios
 
-MySQL 8 + mysql2
+MySQL + mysql2
 
-Docker e Docker Compose
+Docker
 
 Dotenv
 
-📁 Estrutura principal do projeto
+📁 Estrutura do Projeto
 desafio-tecnico/
- ├── index.js
- ├── package.json
- ├── Dockerfile
- ├── docker-compose.yml
- ├── schema.sql
- ├── cnpjs.txt
- ├── .env.example
- └── .gitignore
+├── index.js
+├── package.json
+├── Dockerfile
+├── docker-compose.yml
+├── schema.sql
+├── cnpjs.txt
+├── .env.example
+└── .gitignore
 
-⚙️ Configuração do Ambiente
+⚙️ Configuração (Local)
+
 1. Instalar dependências
-npm install
+   npm install
 
-2. Criar o arquivo .env
+2. Criar e configurar o arquivo .env
 
-Copie o .env.example:
-
-cp .env.example .env
-
-
-Preencha os valores, por exemplo:
+Crie o arquivo baseado no .env.example:
 
 CASADOSDADOS_API_KEY=SEU_TOKEN_AQUI
 DB_HOST=127.0.0.1
@@ -48,108 +42,101 @@ DB_PASS=sua_senha
 DB_NAME=casadosdados
 REQUEST_DELAY_MS=500
 
+⚠️ Observação: no Docker, DB_HOST será db.
 
-Obs: quando rodar com Docker, o DB_HOST deve ser db.
-
-▶️ Como usar (sem Docker)
-Consultar um único CNPJ
+▶️ Executando sem Docker
+📌 Consultar um único CNPJ
 node index.js 27865757000102
 
-Processar todos os CNPJs do arquivo cnpjs.txt
+📌 Processar todos os CNPJs do arquivo cnpjs.txt
 node index.js --txt
 
-Consultar depois no MySQL
+📌 Consultar dados salvos no MySQL
 USE casadosdados;
-SELECT * FROM empresas;
-SELECT * FROM socios;
+SELECT _ FROM empresas;
+SELECT _ FROM socios;
 
-🐳 Como usar com Docker
+🐳 Executando com Docker
 
-O Docker Compose sobe automaticamente:
+1. Ajustar .env para Docker:
+   CASADOSDADOS_API_KEY=SEU_TOKEN_AQUI
+   DB_HOST=db
+   DB_USER=root
+   DB_PASS=change_me
+   DB_NAME=casadosdados
+   REQUEST_DELAY_MS=500
 
-o MySQL
+2. Subir a aplicação
+   docker-compose up --build
 
-o app Node
+O Docker Compose vai:
 
-aplica o schema.sql na primeira execução
+Subir o MySQL
 
-e processa os CNPJs do arquivo
+Aplicar o schema.sql automaticamente
 
-1. Ajustar .env para Docker
-DB_HOST=db
-DB_USER=root
-DB_PASS=change_me
-DB_NAME=casadosdados
-CASADOSDADOS_API_KEY=SEU_TOKEN
+Subir a aplicação
 
-2. Subir tudo com Docker Compose
-docker-compose up --build
+Processar o arquivo cnpjs.txt
 
-3. Logs
+3. Ver logs
 
 Aplicação:
 
 docker-compose logs -f app
 
-
-Banco:
+MySQL:
 
 docker-compose logs -f db
 
-4. Rodar um único CNPJ via Docker
-docker-compose run --rm app node index.js 27865757000102
+4. Executar consulta de um único CNPJ via Docker
+   docker-compose run --rm app node index.js 27865757000102
 
-5. Acessar o MySQL do container
-docker exec -it desafio_db bash
-mysql -uroot -pchange_me casadosdados
+5. Acessar o MySQL dentro do container
+   docker exec -it desafio_db bash
+   mysql -uroot -pchange_me casadosdados
 
-6. Parar containers
-docker-compose down
+6. Derrubar containers
+   docker-compose down
 
-
-Para apagar o volume (resetar o banco):
+Para apagar o banco:
 
 docker-compose down -v
 
-📝 Sobre o arquivo cnpjs.txt
+📄 Sobre o arquivo cnpjs.txt
 
-Coloque um CNPJ por linha:
+Cada linha deve conter um único CNPJ:
 
 12345678000195
 27865757000102
 34331903000177
 
+Linhas vazias e CNPJs inválidos são ignorados automaticamente.
 
-Entradas inválidas são ignoradas automaticamente.
+🧠 Funcionamento interno (Resumo)
 
-🧠 Como o código funciona (resumo)
+O CLI verifica se deve processar um único CNPJ ou o arquivo inteiro
 
-O usuário passa um CNPJ ou usa --txt
+Cada CNPJ é validado
 
-O código valida o formato
+A API da Casa dos Dados é consultada
 
-Faz a requisição para a API da Casa dos Dados
+Os dados são salvos nas tabelas empresas e socios
 
-Salva as informações da empresa no banco
+Sócios antigos são removidos e substituídos pelos novos
 
-Remove e reinsere os sócios (mantendo consistência)
+Logs são exibidos no terminal para acompanhar o processo
 
-Exibe um resumo no terminal
+✔️ Objetivo
 
-✔️ Objetivo do projeto
+Estruturação de CLI em Node.js
 
-A ideia deste desafio é mostrar:
+Integração com API externa
 
-manipulação de APIs externas
+Persistência em banco relacional
 
-uso de Node.js no formato ESM
+Uso de transações no MySQL
 
-leitura de arquivos
+Organização do ambiente via Docker
 
-tratamento de erros
-
-persistência em banco relacional
-
-transações no MySQL
-
-uso de Docker para padronizar o ambiente
+Documentação clara do funcionamento
