@@ -5,8 +5,6 @@ Este projeto realiza consultas de CNPJ utilizando a API da Casa dos Dados e salv
 A aplicação funciona via linha de comando (CLI) e também possui configuração completa via Docker.
 
 
-
-
 ## 📦 Tecnologias utilizadas
 
 Para rodar esse projeto, você vai precisar adicionar as seguintes variáveis de ambiente no seu .env
@@ -43,12 +41,6 @@ REQUEST_DELAY_MS=500
 ```
 ⚠️ Observação: no Docker, DB_HOST será db.
 
-
-
-
-
-
-    
 
 ## ▶️ Executando sem Docker
 
@@ -140,8 +132,6 @@ Para apagar o banco:
 docker-compose down -v
 ```
 
-
-
 ## 📄 Sobre o arquivo cnpjs.txt
 
 Cada linha deve conter um único CNPJ:
@@ -152,6 +142,7 @@ Cada linha deve conter um único CNPJ:
 34331903000177
 ```
 Linhas vazias e CNPJs inválidos são ignorados automaticamente.
+
 
 ## 🧠 Funcionamento interno (Resumo)
 
