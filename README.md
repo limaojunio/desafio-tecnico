@@ -65,17 +65,19 @@ SELECT * FROM socios;
 
 ## 🐳 Executando com Docker
 
-### 1. Ajustar .env para Docker
+### 1. Ajustar .env para uso com Docker
 
 ```
 CASADOSDADOS_API_KEY=SEU_TOKEN_AQUI
 DB_HOST=db
 DB_USER=root
-DB_PASS=change_me
+DB_PASS=root
 DB_NAME=casadosdados
 REQUEST_DELAY_MS=500
 
 ```
+
+Importante: DB_HOST deve ser db porque esse é o nome do serviço MySQL dentro do Docker Compose.
 
 ### 2. Subir a aplicação
 
@@ -115,16 +117,53 @@ docker-compose run --rm app node index.js 27865757000102
 
 ```
 docker exec -it desafio_db bash
-mysql -uroot -pchange_me casadosdados
+mysql -uroot -proot casadosdados
+```
+✔ No prompt de senha do MySQL, não aparece nada ao digitar. Isso é normal.
+
+### 6. 📊 Consultar tabelas dentro do MySQL pelo Docker
+
+Depois de entrar no MySQL via Docker, execute:
+
+Para ver todas as tabelas:
+
+```
+SHOW TABLES;
 ```
 
-### 6. Derrubar containers
+Para ver as primeiras linhas da tabela empresas:
+
+```
+SELECT * FROM empresas LIMIT 10;
+```
+
+Para ver as primeiras linhas da tabela socios:
+
+```
+SELECT * FROM socios LIMIT 10;
+```
+
+Para ver estrutura da tabela:
+
+```
+DESCRIBE empresas;
+DESCRIBE socios;
+```
+
+Para ver o schema completo: 
+
+```
+SHOW CREATE TABLE empresas;
+SHOW CREATE TABLE socios;
+```
+
+### 7. Derrubar containers
 
 ```
 docker-compose down
 ```
 
-Para apagar o banco:
+Para apagar também o banco (volume MySQL):
 
 ```
 docker-compose down -v
@@ -155,6 +194,7 @@ Linhas vazias e CNPJs inválidos são ignorados automaticamente.
     5. Sócios antigos são removidos e substituídos pelos novos
     
     6. Logs são exibidos no terminal para acompanhar o processo
+    
 ## ✔️ Objetivo
 
 - Estruturação de CLI em Node.js

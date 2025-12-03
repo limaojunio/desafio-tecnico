@@ -1,0 +1,36 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: desafio_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASS}
+      MYSQL_DATABASE: ${DB_NAME:-casadosdados}
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    ports:
+      - "3307:3306"
+
+  app:
+    build: .
+    container_name: desafio_app
+    depends_on:
+      - db
+    env_file:
+      - .env
+    environment:
+      DB_HOST: db
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      DB_NAME: ${DB_NAME}
+      CASADOSDADOS_API_KEY: ${CASADOSDADOS_API_KEY}
+      REQUEST_DELAY_MS: ${REQUEST_DELAY_MS:-500}
+    volumes:
+      - ./:/usr/src/app
+    command: sh -c "echo 'Aguardando DB...' && sleep 25 && node index.js --txt"
+    restart: "no"
+
+volumes:
+  db_data:
+    driver: local
