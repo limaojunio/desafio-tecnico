@@ -121,7 +121,7 @@ mysql -uroot -proot casadosdados
 ```
 ✔ No prompt de senha do MySQL, não aparece nada ao digitar. Isso é normal.
 
-### 6. 📊 Consultar tabelas dentro do MySQL pelo Docker
+### 6. Consultar tabelas dentro do MySQL pelo Docker
 
 Depois de entrar no MySQL via Docker, execute:
 
